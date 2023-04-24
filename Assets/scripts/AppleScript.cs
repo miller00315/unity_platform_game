@@ -9,6 +9,7 @@ public class AppleScript : MonoBehaviour
 
     public GameObject collected;
 
+    public int score;
     // Start is called before the first frame update
     void Start()
     {
@@ -25,7 +26,11 @@ public class AppleScript : MonoBehaviour
             
             collected.SetActive(true);
 
+            GameController.instance.UpdateScore(score);
+
             Destroy(gameObject, 0.4f);
         }
     }
+
+   
 }
