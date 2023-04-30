@@ -11,14 +11,17 @@ public class PlayerScript : MonoBehaviour
     public bool isJumping;
     public bool doubleJumping;
 
+    public GameController GameController;
+
     private Rigidbody2D Rigidbody2D;
 
     private Animator Animator;
     // Start is called before the first frame update
+
     void Start()
     {
         Rigidbody2D = GetComponent<Rigidbody2D>();
-        Animator  = GetComponent<Animator>();
+        Animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -34,51 +37,54 @@ public class PlayerScript : MonoBehaviour
 
         transform.position += movement * Time.deltaTime * Speed;
 
-        if(Input.GetAxis("Horizontal") > 0f)
+        if (Input.GetAxis("Horizontal") > 0f)
         {
 
             Animator.SetBool("walk", true);
 
             transform.eulerAngles = new Vector3(0f, 0f, 0f);
 
-        } else if(Input.GetAxis("Horizontal") < 0f) 
+        }
+        else if (Input.GetAxis("Horizontal") < 0f)
         {
 
             Animator.SetBool("walk", true);
 
             transform.eulerAngles = new Vector3(0f, 180f, 0f);
 
-        } else 
+        }
+        else
         {
-           Animator.SetBool("walk", false); 
+            Animator.SetBool("walk", false);
         }
 
     }
 
     void Jump()
     {
-        if(Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump"))
         {
             if (!isJumping)
             {
-               ExecuteJump();
+                ExecuteJump();
                 doubleJumping = true;
                 Animator.SetBool("jump", true);
-            } else if (doubleJumping)
+            }
+            else if (doubleJumping)
             {
                 ExecuteJump(2f);
-                doubleJumping = false; 
+                doubleJumping = false;
             }
-            
+
         }
     }
 
     private void ExecuteJump(float factor = 1f)
     {
-         Rigidbody2D.AddForce(new Vector3(0f, JumpForce * factor), ForceMode2D.Impulse);
+        Rigidbody2D.AddForce(new Vector3(0f, JumpForce * factor), ForceMode2D.Impulse);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision) 
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.layer == 8)
         {
@@ -86,13 +92,22 @@ public class PlayerScript : MonoBehaviour
             Animator.SetBool("jump", false);
         }
 
-        if(collision.gameObject.tag == "Spikes")
+        if (collision.gameObject.tag == "Spikes")
         {
-            Debug.Log("Tocou o espinho");
+            GameController.instance.ShowGameOver();
+
+            Destroy(gameObject);
+        }
+
+        if (collision.gameObject.tag == "Chain")
+        {
+            GameController.instance.ShowGameOver();
+
+            Destroy(gameObject);
         }
     }
 
-    private void OnCollisionExit2D(Collision2D collision) 
+    private void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.gameObject.layer == 8)
         {

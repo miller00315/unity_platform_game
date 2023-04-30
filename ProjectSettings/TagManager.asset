@@ -6,6 +6,7 @@ TagManager:
   tags:
   - ObjectDestroyer
   - Spikes
+  - Chain
   layers:
   - Default
   - TransparentFX
