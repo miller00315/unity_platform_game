@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerScript : MonoBehaviour
 {
@@ -83,6 +84,11 @@ public class PlayerScript : MonoBehaviour
         {
             isJumping = false;
             Animator.SetBool("jump", false);
+        }
+
+        if(collision.gameObject.tag == "Spikes")
+        {
+            Debug.Log("Tocou o espinho");
         }
     }
 
