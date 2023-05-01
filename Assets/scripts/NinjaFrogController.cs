@@ -20,6 +20,10 @@ public class NinjaFrogController : MonoBehaviour
 
     public LayerMask layer;
 
+    public int score;
+
+    private bool playerDestroyed = false;
+
     void Start()
     {
         rigidBody = GetComponent<Rigidbody2D>();
@@ -46,7 +50,7 @@ public class NinjaFrogController : MonoBehaviour
         {
             float height = collision.contacts[0].point.y - headPoint.position.y;
 
-            if (height > 0)
+            if (height > 0 && !playerDestroyed)
             {
                 collision.gameObject.GetComponent<Rigidbody2D>().AddForce(Vector2.up * 10, ForceMode2D.Impulse);
 
@@ -64,7 +68,17 @@ public class NinjaFrogController : MonoBehaviour
 
                 rigidBody.bodyType = RigidbodyType2D.Kinematic;
 
+                GameController.instance.UpdateScore(score);
+
                 Destroy(gameObject, 0.33f);
+            }
+            else
+            {
+                playerDestroyed = true;
+
+                GameController.instance.ShowGameOver();
+
+                Destroy(collision.gameObject);
             }
         }
     }
